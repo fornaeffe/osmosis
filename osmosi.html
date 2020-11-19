@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Osmosis simulation</title>
+    <style>
+      body {
+        margin: 0;
+      }
+	  
+	  .bar {
+		padding: 2px;
+		margin: 5px;
+		border: 1px solid black;
+		background: #aaa;
+	  }
+	  
+	  .title {		
+		float: left;
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 1.2 em;
+		font-weight: bold;
+	  }
+	  
+      .toolbar {
+		float: right;
+		font-family: Arial, Helvetica, sans-serif;
+      }
+
+      button {
+        width: 100px;
+      }
+
+      input[type="range"] {
+      }
+
+      span {
+         position: relative;
+         bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+	<div class="bar">
+		<div class="title">
+			Osmosis simulation
+		</div>
+		<div class="toolbar">
+		  <!-- <input type="range" min="2" max="50" value="30" aria-label="select pen size"><span class="output">30</span> -->
+		  <button class="reset">Reset</button>
+		  <button class="start">Start/Stop</button>
+		  Water:
+		  <input type="range" min="0" max="50" value="25" class="slider" id="water">
+		  Sodium:
+		  <input type="range" min="0" max="20" value="10" class="slider" id="sodium">
+		</div>
+	</div>
+    <canvas class="myCanvas">
+      <p>This browser doesn't support canvas.</p>
+    </canvas>
+
+    <script>
+
+const size = 10;
+const frictionThreshold = 20;
+
+const canvas = document.querySelector('.myCanvas');
+const ctx = canvas.getContext('2d');
+
+const width = canvas.width = document.body.offsetWidth;
+const height = canvas.height = window.innerHeight-30;
+
+const startBtn = document.querySelector('.start');
+const resetBtn = document.querySelector('.reset');
+const waterSlider = document.getElementById("water");
+const sodiumSlider = document.getElementById("sodium");
+
+let balls = [];
+let sodiums = [];
+
+// function to generate random number
+
+function random(min, max) {
+  const num = Math.floor(Math.random() * (max - min + 1)) + min;
+  return num;
+}
+
+// define Ball constructor
+
+function Ball(x, y, theta, velX, velY, color, size) {
+  this.x = x;
+  this.y = y;
+  this.theta = theta;
+  this.velX = velX;
+  this.velY = velY;
+  this.color = color;
+  this.size = size;
+}
+
+// define ball draw method
+
+Ball.prototype.draw = function() {  
+  ctx.beginPath();
+  ctx.fillStyle = "white";
+  ctx.arc(
+	this.x + 0.9584 * size * Math.cos(this.theta + 2.2252948), 
+	this.y + 0.9584 * size * Math.sin(this.theta + 2.2252948), 
+	size * 1.2, 
+	0, 
+	2 * Math.PI);
+  ctx.fill();
+  
+  ctx.beginPath();
+  ctx.fillStyle = "white";
+  ctx.arc(
+	this.x + 0.9584 * size * Math.cos(this.theta - 2.2252948), 
+	this.y + 0.9584 * size * Math.sin(this.theta - 2.2252948), 
+	size * 1.2, 
+	0, 
+	2 * Math.PI);
+  ctx.fill();
+  
+  ctx.beginPath();
+  ctx.fillStyle = "red";
+  ctx.arc(this.x, this.y, size * 1.52, 0, 2 * Math.PI);
+  ctx.fill();
+};
+
+// define ball update method
+
+Ball.prototype.update = function() {
+  let d = width;
+  
+  for(let j = 0; j < sodiums.length; j++) {
+    const dx = this.x - sodiums[j].x;
+    const dy = this.y - sodiums[j].y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+	
+	if(distance < d) {
+		d = distance;
+		if(dx < 0) {
+			this.theta = Math.atan( dy / dx );
+		} else {
+			this.theta = Math.PI + Math.atan( dy / dx );
+		}
+	}
+
+	
+	if(distance <= 100) {
+		const F = 400 / ( distance * distance );
+	
+		this.velX += - F * ( dx / distance );
+		this.velY += - F * ( dy / distance );
+	
+		const F2 = 12000 / ( distance * distance * distance );
+		this.velX += F2 * ( dx / distance );
+		this.velY += F2 * ( dy / distance );
+		
+		this.velX += - ( this.velX - sodiums[j].velX ) * 0.1;
+		this.velY += - ( this.velY - sodiums[j].velY ) * 0.1;
+	}
+
+  }
+  
+  for(let j = 0; j < balls.length; j++) {
+	if(!(this === balls[j])) {
+		const dx = this.x - balls[j].x;
+		const dy = this.y - balls[j].y;
+		const distance = Math.sqrt(dx * dx + dy * dy);
+		const F = 1000 / ( distance * distance * distance );
+		
+		this.velX += F * ( dx / distance );
+		this.velY += F * ( dy / distance );
+		
+		
+	}
+
+  }
+  
+  if((this.x) >= width) {
+    this.velX += - 0.1 * (this.x - width);
+  }
+
+  if((this.x) <= 0) {
+    this.velX += - 0.1 * this.x;
+  }
+
+  if((this.y) >= height) {
+    this.velY += - 0.1 * ( this.y - height );
+  }
+
+  if((this.y) <= 0) {
+    this.velY += - 0.1 * this.y;
+  }
+  
+  if(this.velX * this.velX + this.velY * this.velY >= frictionThreshold) {
+	this.velX += - this.velX * 0.1;
+	this.velY += - this.velY * 0.1;
+  }
+  
+  this.x += this.velX;
+  this.y += this.velY;
+};
+
+
+function Sodium(x, y, velX, velY, color, size) {
+  this.x = x;
+  this.y = y;
+  this.velX = velX;
+  this.velY = velY;
+  this.color = color;
+  this.size = size;
+}
+
+// define ball draw method
+
+Sodium.prototype.draw = function() {
+  ctx.beginPath();
+  ctx.fillStyle = "#ab5cf2";
+  ctx.arc(this.x, this.y, size * 2.27, 0, 2 * Math.PI);
+  ctx.fill();
+};
+
+// define ball update method
+
+Sodium.prototype.update = function() {
+  if((this.x) >= width / 2 - 20) {
+    this.velX += - 0.1 * (this.x - width / 2 + 20);
+  }
+
+  if((this.x) <= 0) {
+    this.velX += - 0.1 * this.x;
+  }
+
+  if((this.y) >= height) {
+    this.velY += - 0.1 * ( this.y - height );
+  }
+
+  if((this.y) <= 0) {
+    this.velY += - 0.1 * this.y;
+  }
+  
+
+  this.x += this.velX;
+  this.y += this.velY;
+};
+
+drawCanvas = function() {
+	ctx.fillStyle = 'rgb(0,0,0)';
+	ctx.fillRect(0,0,width,height);
+	ctx.fillStyle = 'rgb(100,100,100)';
+	ctx.fillRect(width / 2 - 5,0,10,height);
+	ctx.fillStyle = 'rgb(255,255,100)';
+	ctx.fillRect(width / 2 - 7,0,2,height);
+	ctx.fillRect(width / 2 + 5,0,2,height);
+	let w1 = 0;
+	let w2 = 0;
+	
+	for(let i = 0; i < balls.length; i++) {
+		balls[i].draw();
+		if(balls[i].x <= width / 2) {w1++;} else {w2++;}
+	}
+	for(let i = 0; i < sodiums.length; i++) {
+		sodiums[i].draw();
+	}
+	ctx.fillStyle = 'white';
+	ctx.font = '18px arial';
+	ctx.fillText('Water = ' + w1, 30, 30);
+	ctx.fillText('Water = ' + w2, width / 2 + 30, 30);
+}
+
+addBall = function() {
+	const size = 10;
+	let ball = new Ball(
+		random(0 + size,width - size),
+		random(0 + size,height - size),
+		Math.random() * Math.PI * 2,
+		Math.random() * 5 - 2,
+		Math.random() * 5 - 2,
+		'rgb(' + 100 + ',' + 100 + ',' + 255 +')',
+		size
+	);
+	balls.push(ball);
+}
+
+
+addSodium = function() {
+	const size = 10;
+	let sodium = new Sodium(
+		// ball position always drawn at least one ball width
+		// away from the edge of the canvas, to avoid drawing errors
+		random(0 + size,width/2 - size),
+		random(0 + size,height - size),
+		Math.random() * 5 - 2,
+		Math.random() * 5 - 2,
+		'rgb(' + 255 + ',' + 0 + ',' + 100 +')',
+		size
+	);
+	sodiums.push(sodium);
+}
+
+let pressed = false;
+
+startBtn.onclick = function() {
+	if(pressed) {pressed = false;} else {pressed = true;}
+	
+}
+
+waterSlider.oninput = function() {
+	while(balls.length < this.value) {
+		addBall();
+	
+		drawCanvas();
+	}
+	while(balls.length > this.value) {
+		balls.pop();		
+	
+		drawCanvas();
+	}
+}
+
+sodiumSlider.oninput = function() {
+	while(sodiums.length < this.value) {
+		addSodium();
+	
+		drawCanvas();
+	}
+	while(sodiums.length > this.value) {
+		sodiums.pop();		
+	
+		drawCanvas();
+	}
+}
+
+// define array to store balls and populate it
+
+reset = function() {
+	  
+	balls = [];
+	sodiums = [];
+	while(balls.length < waterSlider.value) {
+	  addBall();
+	}
+	while(sodiums.length < sodiumSlider.value) {
+	  addSodium();
+	}
+	
+	drawCanvas();
+}
+
+reset();
+
+
+resetBtn.onclick = function() {
+	reset();
+}
+
+
+// define loop that keeps drawing the scene constantly
+
+function loop() {
+  if(pressed) {
+	for(let i = 0; i < balls.length; i++) {
+		balls[i].update();
+	}
+	for(let i = 0; i < sodiums.length; i++) {
+		sodiums[i].update();
+	}
+	  
+	drawCanvas();
+  }
+
+  requestAnimationFrame(loop);
+}
+
+loop();
+
+    </script>
+  </body>
+</html>
