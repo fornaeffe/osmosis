@@ -205,8 +205,8 @@ const waterSlider = document.getElementById("water");
 const sodiumSlider = document.getElementById("sodium");
 
 // Set up canvas and context
-const width = canvas.width = window.innerWidth;
-const height = canvas.height = window.innerHeight;
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
 const ctx = canvas.getContext('2d');
 
 class Particle{
@@ -402,6 +402,26 @@ sodiumSlider.oninput = function() {
 		drawCanvas();
 	}
 }
+
+// Resizer
+function resizer() {
+	const prevWidth = width;
+	const prevHeight = height;			
+	width = canvas.width = window.innerWidth;
+	height = canvas.height = window.innerHeight;
+	const rx = width / prevWidth;
+	const ry = height / prevHeight;
+	for(let i = 0; i < waters.length; i++) {
+		waters[i].x = waters[i].x * rx;
+		waters[i].y = waters[i].y * ry;
+	}
+	for(let i = 0; i < sodiums.length; i++) {
+		sodiums[i].x = sodiums[i].x * rx;
+		sodiums[i].y = sodiums[i].y * ry;
+	}
+	drawCanvas();
+}
+window.addEventListener('resize', resizer);
 
 drawCanvas = function() {
 	ctx.fillStyle = 'rgb(0,0,0)';
