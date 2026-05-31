@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
   	<head>
+		<meta charset="utf-8">
 		<link rel="icon" href="favicon.ico">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Osmosis simulator</title>
+		<title data-i18n="app.title">Osmosis simulator</title>
 		<style>
 			body {
 				margin: 0;
@@ -20,6 +21,21 @@
 				bottom: 0;
 				left: 0;
 				margin: 5px;
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+			.language-selector {
+				appearance: none;
+				background: rgba(0,0,0,0.4);
+				border: 1px solid rgba(186,218,85,0.6);
+				border-radius: 4px;
+				color: #bada55;
+				font: inherit;
+				padding: 1px 18px 1px 5px;
+			}
+			.language-selector option {
+				color: #222;
 			}
 
 
@@ -166,33 +182,39 @@
   	<body>
 		<div id="container">
 			<canvas id="myCanvas">
-				<p>This browser doesn't support canvas.</p>
+				<p data-i18n="app.canvasUnsupported">Questo browser non supporta canvas.</p>
 			</canvas>
 			<ul id="myUL">
-				<li><span class="caret">Controlli</span>
+				<li><span class="caret" data-i18n="app.controls">Controlli</span>
 				  	<ul class="nested">
 						<li>
 							<input type="checkbox" id="start" class="checkbox" />  
 							<label for="start" class="switch"></label>
-							Avvia
+							<span data-i18n="app.start">Avvia</span>
 						</li>
 						<li>
-							Molecole d'acqua: <br />
+							<span data-i18n="app.waterMolecules">Molecole d'acqua:</span><br />
 							<input type="range" min="0" max="50" value="25" class="slider" id="water" />
 						</li>
 						<li>
-							Ioni sodio: <br />
+							<span data-i18n="app.sodiumIons">Ioni sodio:</span><br />
 							<input type="range" min="0" max="20" value="10" class="slider" id="sodium">
 						</li>
 				  	</ul>
 				</li>
 			</ul>
 			<div id="help">
-				<a href="help.html" target="_blank">Help & Credits</a>
+				<a href="help.html?lang=it" target="_blank" data-i18n="app.helpCredits" data-i18n-help-link>Aiuto e crediti</a>
+				<select id="languageSelector" class="language-selector" data-i18n-language-selector data-i18n-attrs="aria-label:app.languageLabel;title:app.languageLabel">
+					<option value="it">IT</option>
+					<option value="en">EN</option>
+				</select>
 			</div>
 		</div>
-	</body>
+	<script src="i18n.js"></script>
 	<script>
+		window.osmosisI18n.setupPageI18n("app.title");
+
 		// Dropdown controls
 		const toggler = document.getElementsByClassName("caret");
 
@@ -213,6 +235,7 @@ const canvas = document.getElementById("myCanvas");
 const startBtn = document.getElementById("start");
 const waterSlider = document.getElementById("water");
 const sodiumSlider = document.getElementById("sodium");
+const translate = window.osmosisI18n ? window.osmosisI18n.translate : function(key) { return key; };
 
 // Set up canvas and context
 let width = canvas.width = window.innerWidth;
@@ -453,9 +476,13 @@ drawCanvas = function() {
 	}
 	ctx.fillStyle = 'white';
 	ctx.font = '18px arial';
-	ctx.fillText('Water = ' + w1, width / 2 - 130, 30);
-	ctx.fillText('Water = ' + w2, width / 2 + 30, 30);
+	ctx.fillText(translate('app.waterLabel') + ' = ' + w1, width / 2 - 130, 30);
+	ctx.fillText(translate('app.waterLabel') + ' = ' + w2, width / 2 + 30, 30);
 }
+
+document.addEventListener("osmosis:languagechange", function() {
+	drawCanvas();
+});
 
 // define loop that keeps drawing the scene constantly
 
@@ -482,4 +509,5 @@ init();
 loop();
 
     </script>
+	</body>
 </html>

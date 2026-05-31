@@ -1,84 +1,114 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 	<head>
+		<meta charset="utf-8">
 		<link rel="icon" href="favicon.ico">
-        <title>Osmosis simulator - Help</title>
-        <style>
-            * {
-                color: rgb(212, 212, 212);
-                text-align: left;
-                font-family: Roboto, Arial, sans-serif;
-            }
-            body {
-                background-color: #222;
-                padding: 10px;
-            }
-            p {
-                margin: 0 0 10px 0;
-                padding: 0;
-            }
-            h1 {
-                margin: 10px 0 10px 0;
-                padding: 0;
-                font-size: 2em;
-                color:rgb(228, 228, 228);
-            }
-            /* unvisited link */
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title data-i18n="help.title">Osmosis simulator - Aiuto</title>
+		<style>
+			* {
+				color: rgb(212, 212, 212);
+				text-align: left;
+				font-family: Roboto, Arial, sans-serif;
+			}
+			body {
+				background-color: #222;
+				padding: 10px;
+			}
+			p {
+				margin: 0 0 10px 0;
+				padding: 0;
+			}
+			h1 {
+				margin: 10px 0 10px 0;
+				padding: 0;
+				font-size: 2em;
+				color:rgb(228, 228, 228);
+			}
+			#pageHeader {
+				align-items: center;
+				display: flex;
+				gap: 12px;
+				justify-content: space-between;
+			}
+			.language-selector {
+				appearance: none;
+				background: rgba(0,0,0,0.25);
+				border: 1px solid rgba(186,218,85,0.6);
+				border-radius: 4px;
+				color: #bada55;
+				font: inherit;
+				padding: 2px 18px 2px 6px;
+			}
+			.language-selector option {
+				color: #222;
+			}
+			/* unvisited link */
 			a:link {
-			color: #bada55;
-            text-decoration: none;
+				color: #bada55;
+				text-decoration: none;
 			}
 			/* visited link */
 			a:visited {
-			color: #bada55;
-            text-decoration: none;
+				color: #bada55;
+				text-decoration: none;
 			}
 			/* mouse over link */
 			a:hover {
-			color: #bada55;
-            text-decoration: underline;
+				color: #bada55;
+				text-decoration: underline;
 			}
 			/* selected link */
 			a:active {
-			color: #bada55;
-            text-decoration: underline;
+				color: #bada55;
+				text-decoration: underline;
 			}
-        </style>
-    </head>
-    <body>
-        <h1>Aiuto</h1>
-        <p>
-            Osmosis simulator è uno strumento didattico per spiegare a livello microscopico il fenomeno
-            dell'osmosi.
-        </p>
-        <p>
-            Al centro è mostrata una membrana semipermeabile (permeabile all'acqua, ma non agli ioni
-            sodio). A sinistra della membrana sono presenti ioni sodio (viola), sia a sinistra che a destra
-            sono presenti molecole d'acqua (rappresentate con cerchi rossi per l'ossigeno e bianchi
-            per l'idrogeno).
-        </p>
-        <p>
-            In alto a sinistra è presente un elenco espandibile di controlli.<br />
-            È possibile avviare o bloccare la simulazione.<br />
-            È possibile variare la quantità di molecole d'acqua da 1 a 50 (le nuove molecole vengono
-            piazzate in modo casuale).<br />
-            È possibile variare la quantità di ioni sodio da 1 a 20 (i nuovi ioni vengono
-            piazzati in modo casuale nella metà sinistra della finestra).
-        </p>
-        <p>
-            Avviando la simulazione con l'interruttore presente nell'elenco dei comandi le molecole iniziano
-            a muoversi con velocità casuali. Gli ioni sodio non possono attraversare la membrana, le molecole
-            d'acqua sì. Se le molecole d'acqua incontrano gli ioni sodio, stabiliscono con essi una interazione:
-            in presenza di ioni sodio le molecole d'acqua, che all'inizio sono disposte casualmente, si concentreranno 
-            nel lato sinistro della finestra. Rimuovendo gli ioni sodio le molecole d'acqua, per diffusione,
-            si distribuiranno nuovamente in modo pressoché equo ai due lati della membrana.
-        </p>
-        <h1>Attribuzioni</h1>
-        <p>Sviluppato da Luca Fornasari: <a href="mailto:fornaeffe@gmail.com">fornaeffe@gmail.com</a></p>
-        <p>Origine delle parti di codice indicata nel codice stesso</p>
-        <p>
-            Se desiderate suggerire modifiche, segnalare bug o contribuire allo sviluppo di questa
-            web app, <a href="mailto:fornaeffe@gmail.com">scrivetemi</a> o visitate il <a href="https://github.com/fornaeffe/osmosis">repository</a>. 
-        </p>
-    </body>
+		</style>
+	</head>
+	<body>
+		<div id="pageHeader">
+			<h1 data-i18n="help.heading">Aiuto</h1>
+			<select id="languageSelector" class="language-selector" data-i18n-language-selector data-i18n-attrs="aria-label:app.languageLabel;title:app.languageLabel">
+				<option value="it">IT</option>
+				<option value="en">EN</option>
+			</select>
+		</div>
+		<p data-i18n="help.intro">
+			Osmosis simulator &egrave; uno strumento didattico per spiegare a livello microscopico il fenomeno
+			dell'osmosi.
+		</p>
+		<p data-i18n="help.membrane">
+			Al centro &egrave; mostrata una membrana semipermeabile (permeabile all'acqua, ma non agli ioni
+			sodio). A sinistra della membrana sono presenti ioni sodio (viola), sia a sinistra che a destra
+			sono presenti molecole d'acqua (rappresentate con cerchi rossi per l'ossigeno e bianchi
+			per l'idrogeno).
+		</p>
+		<p data-i18n-html="help.controls">
+			In alto a sinistra &egrave; presente un elenco espandibile di controlli.<br />
+			&Egrave; possibile avviare o bloccare la simulazione.<br />
+			&Egrave; possibile variare la quantit&agrave; di molecole d'acqua da 1 a 50 (le nuove molecole vengono
+			piazzate in modo casuale).<br />
+			&Egrave; possibile variare la quantit&agrave; di ioni sodio da 1 a 20 (i nuovi ioni vengono
+			piazzati in modo casuale nella met&agrave; sinistra della finestra).
+		</p>
+		<p data-i18n="help.simulation">
+			Avviando la simulazione con l'interruttore presente nell'elenco dei comandi le molecole iniziano
+			a muoversi con velocit&agrave; casuali. Gli ioni sodio non possono attraversare la membrana, le molecole
+			d'acqua s&igrave;. Se le molecole d'acqua incontrano gli ioni sodio, stabiliscono con essi una interazione:
+			in presenza di ioni sodio le molecole d'acqua, che all'inizio sono disposte casualmente, si concentreranno
+			nel lato sinistro della finestra. Rimuovendo gli ioni sodio le molecole d'acqua, per diffusione,
+			si distribuiranno nuovamente in modo pressoch&eacute; equo ai due lati della membrana.
+		</p>
+		<h1 data-i18n="help.creditsHeading">Attribuzioni</h1>
+		<p data-i18n-html="help.developedBy">Sviluppato da Luca Fornasari: <a href="mailto:fornaeffe@gmail.com">fornaeffe@gmail.com</a></p>
+		<p data-i18n="help.codeOrigin">Origine delle parti di codice indicata nel codice stesso</p>
+		<p data-i18n-html="help.contribute">
+			Se desiderate suggerire modifiche, segnalare bug o contribuire allo sviluppo di questa
+			web app, <a href="mailto:fornaeffe@gmail.com">scrivetemi</a> o visitate il <a href="https://github.com/fornaeffe/osmosis">repository</a>.
+		</p>
+		<script src="i18n.js"></script>
+		<script>
+			window.osmosisI18n.setupPageI18n("help.title");
+		</script>
+	</body>
 </html>
