@@ -27,7 +27,8 @@
 				creditsHeading: "Attribuzioni",
 				developedBy: "Sviluppato da Luca Fornasari: <a href=\"mailto:fornaeffe@gmail.com\">fornaeffe@gmail.com</a>",
 				codeOrigin: "Origine delle parti di codice indicata nel codice stesso",
-				contribute: "Se desiderate suggerire modifiche, segnalare bug o contribuire allo sviluppo di questa web app, <a href=\"mailto:fornaeffe@gmail.com\">scrivetemi</a> o visitate il <a href=\"https://github.com/fornaeffe/osmosis\">repository</a>."
+				contribute: "Se desiderate suggerire modifiche, segnalare bug o contribuire allo sviluppo di questa web app, <a href=\"mailto:fornaeffe@gmail.com\">scrivetemi</a> o visitate il <a href=\"https://github.com/fornaeffe/osmosis\">repository</a>.",
+                license: "Questo progetto è rilasciato sotto licenza GNU General Public License v3.0. Vedi <a href=\"https://www.gnu.org/licenses/gpl-3.0.html\">https://www.gnu.org/licenses/gpl-3.0.html</a> per i dettagli.",
 			}
 		},
 		en: {
@@ -52,7 +53,8 @@
 				creditsHeading: "Credits",
 				developedBy: "Developed by Luca Fornasari: <a href=\"mailto:fornaeffe@gmail.com\">fornaeffe@gmail.com</a>",
 				codeOrigin: "The origin of code fragments is indicated in the code itself",
-				contribute: "To suggest changes, report bugs, or contribute to the development of this web app, <a href=\"mailto:fornaeffe@gmail.com\">write to me</a> or visit the <a href=\"https://github.com/fornaeffe/osmosis\">repository</a>."
+				contribute: "To suggest changes, report bugs, or contribute to the development of this web app, <a href=\"mailto:fornaeffe@gmail.com\">write to me</a> or visit the <a href=\"https://github.com/fornaeffe/osmosis\">repository</a>.",
+                license: "This project is licensed under the GNU General Public License v3.0. See <a href=\"https://www.gnu.org/licenses/gpl-3.0.html\">https://www.gnu.org/licenses/gpl-3.0.html</a> for details."
 			}
 		}
 	};
